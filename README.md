@@ -7,3 +7,5 @@
 - [Все релизы](https://github.com/ilinei52/njitSnip-releases/releases)
 
 Статические файлы лендинга лежат в репозитории **nJitSnip** в каталоге `deploy/njitSnip-releases/` и синхронизируются CI в этот репозиторий.
+
+Лендинг: язык **EN / 中文 / ES / FR / RU** (по `navigator.language`, переопределение в `localStorage` ключ `njitsnip-landing-lang`), кнопка скачивания последнего релиза (GitHub API + выбор `.exe` / `.dmg` / `.deb` по User-Agent), карусель скриншотов.

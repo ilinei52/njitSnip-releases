@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>nJitSnip — быстрый доступ к текстовым сниппетам</title>
-  <meta name="description" content="nJitSnip: десктопное приложение для хранения и вставки сниппетов кода и текста. Поиск, теги, браузер, горячие клавиши. Windows, Linux, macOS." />
+  <title data-i18n="docTitle">nJitSnip</title>
+  <meta name="description" content="" data-i18n-content="metaDesc" />
   <style>
     :root {
       --bg: #0c0e12;
@@ -12,36 +12,149 @@
       --text: #e8edf4;
       --muted: #8b98ab;
       --accent: #6ab0e8;
-      --accent-dim: #4a8ec4;
+      --accent-glow: rgba(106, 176, 232, 0.35);
       --border: #2a3340;
       --card: #1a222d;
+      --topbar-h: 56px;
     }
     * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+      padding-top: var(--topbar-h);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, "PingFang SC", "Microsoft YaHei", sans-serif;
       background: radial-gradient(ellipse 120% 80% at 50% -20%, #1a2435 0%, var(--bg) 45%);
       color: var(--text);
       line-height: 1.65;
     }
+
+    /* Top bar */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: var(--topbar-h);
+      background: rgba(12, 14, 18, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      animation: topbarIn 0.6s ease-out both;
+    }
+    @keyframes topbarIn {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .topbar-inner {
+      max-width: 52rem;
+      margin: 0 auto;
+      padding: 0 1rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+    .topbar .brand {
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+      opacity: 0.95;
+    }
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem 0.75rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .btn-download {
+      appearance: none;
+      border: none;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 600;
+      font-size: 0.875rem;
+      padding: 0.5rem 1.1rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #5a9fd4 0%, #4a7ab0 100%);
+      color: #fff;
+      box-shadow: 0 2px 16px var(--accent-glow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s;
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+    .btn-download:hover:not(:disabled) {
+      transform: translateY(-1px) scale(1.02);
+      box-shadow: 0 4px 24px var(--accent-glow);
+    }
+    .btn-download:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+    .btn-download:disabled {
+      opacity: 0.65;
+      cursor: wait;
+      animation: none;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 2px 16px var(--accent-glow); }
+      50% { box-shadow: 0 2px 28px rgba(106, 176, 232, 0.5); }
+    }
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      gap: 0.15rem;
+      font-size: 0.7rem;
+    }
+    .lang-switch button {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 0.2rem 0.35rem;
+      border-radius: 4px;
+      font: inherit;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .lang-switch button:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.06);
+    }
+    .lang-switch button.active {
+      color: var(--accent);
+      border-color: rgba(106, 176, 232, 0.4);
+    }
+
     .wrap {
       max-width: 52rem;
       margin: 0 auto;
-      padding: 2.5rem 1.25rem 4rem;
+      padding: 2rem 1.25rem 4rem;
     }
+
+    /* Hero */
     .hero {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       gap: 1.25rem 1.5rem;
       margin-bottom: 2.5rem;
+      animation: fadeInUp 0.7s ease-out 0.15s both;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .hero img.logo {
       height: 88px;
       width: auto;
       display: block;
       filter: drop-shadow(0 4px 24px rgba(106, 176, 232, 0.15));
+      animation: logoFloat 5s ease-in-out infinite;
+    }
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
     }
     .hero-text h1 {
       font-size: clamp(1.6rem, 4vw, 2rem);
@@ -55,6 +168,7 @@
       margin: 0;
       max-width: 36rem;
     }
+
     h2 {
       font-size: 0.8rem;
       text-transform: uppercase;
@@ -66,30 +180,36 @@
     section {
       margin-bottom: 2.25rem;
     }
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     .purpose {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 14px;
       padding: 1.35rem 1.5rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
-    .purpose p {
-      margin: 0;
-      color: var(--text);
-      font-size: 1rem;
+    .purpose:hover {
+      border-color: rgba(106, 176, 232, 0.25);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     }
-    .purpose p + p {
-      margin-top: 0.75rem;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
+    .purpose p { margin: 0; color: var(--text); font-size: 1rem; }
+    .purpose p + p { margin-top: 0.75rem; color: var(--muted); font-size: 0.95rem; }
+
     .features {
       display: grid;
       gap: 0.65rem 1.5rem;
     }
     @media (min-width: 560px) {
-      .features {
-        grid-template-columns: 1fr 1fr;
-      }
+      .features { grid-template-columns: 1fr 1fr; }
     }
     .features li {
       list-style: none;
@@ -97,7 +217,9 @@
       padding-left: 1.35rem;
       color: var(--text);
       font-size: 0.95rem;
+      transition: transform 0.2s ease;
     }
+    .features li:hover { transform: translateX(4px); }
     .features li::before {
       content: "";
       position: absolute;
@@ -109,144 +231,607 @@
       background: var(--accent);
       opacity: 0.85;
     }
-    .shots {
-      display: flex;
-      flex-direction: column;
-      gap: 1.75rem;
-    }
-    figure {
-      margin: 0;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+
+    /* Carousel */
+    .carousel {
+      position: relative;
+      border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
     }
-    figure img {
+    .carousel-viewport {
+      overflow: hidden;
+      aspect-ratio: 16 / 10;
+      max-height: 70vh;
+      background: #0a0c10;
+    }
+    @media (max-width: 640px) {
+      .carousel-viewport { aspect-ratio: 4 / 3; max-height: 55vh; }
+    }
+    .carousel-track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.55s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+    .carousel-slide {
+      flex: 0 0 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .carousel-slide img {
       width: 100%;
-      height: auto;
-      vertical-align: middle;
-      display: block;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
     }
-    figcaption {
-      padding: 0.65rem 1rem 0.85rem;
+    .carousel-caption {
+      padding: 0.75rem 1rem;
       font-size: 0.85rem;
       color: var(--muted);
       border-top: 1px solid var(--border);
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(0, 0, 0, 0.25);
+      min-height: 2.75rem;
+      display: flex;
+      align-items: center;
     }
+    .carousel-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+      padding: 0 0.35rem;
+    }
+    .carousel-nav button {
+      pointer-events: auto;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: rgba(12, 14, 18, 0.75);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .carousel-nav button:hover {
+      background: rgba(106, 176, 232, 0.25);
+      transform: scale(1.05);
+    }
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.65rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-top: 1px solid var(--border);
+    }
+    .carousel-dots button {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: none;
+      padding: 0;
+      background: var(--muted);
+      opacity: 0.35;
+      cursor: pointer;
+      transition: opacity 0.25s, transform 0.25s, background 0.25s;
+    }
+    .carousel-dots button.active {
+      opacity: 1;
+      background: var(--accent);
+      transform: scale(1.15);
+    }
+
     .card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 14px;
       padding: 1.35rem 1.5rem;
+      transition: border-color 0.3s;
     }
-    .card ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-    .card li + li {
-      margin-top: 0.65rem;
-    }
+    .card:hover { border-color: rgba(106, 176, 232, 0.2); }
+    .card ul { list-style: none; margin: 0; padding: 0; }
+    .card li + li { margin-top: 0.65rem; }
     a {
       color: var(--accent);
       text-decoration: none;
       font-weight: 500;
+      transition: color 0.2s;
     }
-    a:hover {
-      color: #9ec9f0;
-      text-decoration: underline;
-    }
+    a:hover { color: #9ec9f0; text-decoration: underline; }
     .hint {
       margin-top: 2rem;
       font-size: 0.88rem;
       color: var(--muted);
       line-height: 1.5;
     }
+    .version-badge {
+      font-size: 0.65rem;
+      color: var(--muted);
+      margin-left: 0.35rem;
+      font-weight: 500;
+    }
   </style>
 </head>
 <body>
+  <nav class="topbar" aria-label="Primary">
+    <div class="topbar-inner">
+      <span class="brand">nJitSnip</span>
+      <div class="topbar-actions">
+        <button type="button" class="btn-download" id="btn-download" data-i18n="downloadCta">
+          Download latest
+        </button>
+        <span class="version-badge" id="version-badge" hidden></span>
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button type="button" data-lang="en" class="active">EN</button>
+          <button type="button" data-lang="zh">中文</button>
+          <button type="button" data-lang="es">ES</button>
+          <button type="button" data-lang="fr">FR</button>
+          <button type="button" data-lang="ru">RU</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
   <div class="wrap">
     <header class="hero">
-      <img class="logo" src="images/app_logo.png" width="120" height="120" alt="Логотип nJitSnip" />
+      <img class="logo" src="images/app_logo.png" width="120" height="120" alt="" data-i18n-alt="logoAlt" />
       <div class="hero-text">
         <h1>nJitSnip</h1>
-        <p class="lead">
-          Десктопное приложение для хранения текстовых сниппетов — кода, SQL, шаблонов писем и заметок.
-          Вызовите окно поиска глобальным сочетанием клавиш, найдите нужный фрагмент и вставьте его в любую программу.
-        </p>
+        <p class="lead" data-i18n="lead"></p>
       </div>
     </header>
 
-    <section aria-labelledby="purpose-heading">
-      <h2 id="purpose-heading">Назначение</h2>
+    <section class="reveal" aria-labelledby="purpose-heading" data-reveal>
+      <h2 id="purpose-heading" data-i18n="purposeHeading"></h2>
       <div class="purpose">
-        <p>
-          <strong>nJitSnip</strong> снимает рутину копирования из заметок, IDE и мессенджеров: все сниппеты лежат в одном месте,
-          структурированы тегами и описаниями, доступны за пару нажатий клавиш.
-        </p>
-        <p>
-          Подходит разработчикам, техписателям и всем, кто часто вставляет повторяющиеся тексты.
-          Работает в фоне из системного трея на <strong>Windows</strong>, <strong>Linux</strong> и <strong>macOS</strong>.
-        </p>
+        <p data-i18n="purposeP1" data-i18n-html></p>
+        <p data-i18n="purposeP2" data-i18n-html></p>
       </div>
     </section>
 
-    <section aria-labelledby="features-heading">
-      <h2 id="features-heading">Возможности</h2>
+    <section class="reveal" aria-labelledby="features-heading" data-reveal>
+      <h2 id="features-heading" data-i18n="featuresHeading"></h2>
       <ul class="features">
-        <li>Компактное окно поиска с фильтрацией по названию, описанию и тегам</li>
-        <li>Глобальные горячие клавиши: показать окно, новый сниппет, браузер</li>
-        <li>Теги и описания; подсветка синтаксиса в теле сниппета (plain, JS, C++, Bash, Markdown и др.)</li>
-        <li>Браузер сниппетов: список, поиск и редактирование в одном окне</li>
-        <li>Защищённые сниппеты с хранением в системном хранилище (keychain / credential manager)</li>
-        <li>Голосовой ввод текста в поле поиска (где поддерживается ОС)</li>
-        <li>Локализация интерфейса, тёмная тема, настраиваемый акцентный цвет</li>
+        <li data-i18n="f1"></li>
+        <li data-i18n="f2"></li>
+        <li data-i18n="f3"></li>
+        <li data-i18n="f4"></li>
+        <li data-i18n="f5"></li>
+        <li data-i18n="f6"></li>
+        <li data-i18n="f7"></li>
       </ul>
     </section>
 
-    <section aria-labelledby="shots-heading">
-      <h2 id="shots-heading">Скриншоты</h2>
-      <div class="shots">
-        <figure>
-          <img src="images/screenshot-search-postgres.png" alt="Окно поиска: список сниппетов PostgreSQL с тегами" width="800" height="450" loading="lazy" />
-          <figcaption>Окно поиска: результаты с описанием и тегами (#postgres и др.)</figcaption>
-        </figure>
-        <figure>
-          <img src="images/screenshot-search-secure.png" alt="Окно поиска: защищённый сниппет с замком" width="800" height="280" loading="lazy" />
-          <figcaption>Поиск: защищённый сниппет (иконка замка, маскированное содержимое)</figcaption>
-        </figure>
-        <figure>
-          <img src="images/screenshot-browser.png" alt="Браузер сниппетов: список слева, редактор справа" width="1200" height="700" loading="lazy" />
-          <figcaption>Браузер сниппетов: список и фильтр слева, редактирование справа</figcaption>
-        </figure>
+    <section class="reveal" aria-labelledby="shots-heading" data-reveal>
+      <h2 id="shots-heading" data-i18n="shotsHeading"></h2>
+      <div class="carousel" id="carousel" aria-roledescription="carousel">
+        <div class="carousel-viewport">
+          <div class="carousel-track" id="carousel-track">
+            <div class="carousel-slide">
+              <img src="images/screenshot-search-postgres.png" alt="" data-slide-alt="img1Alt" width="800" height="450" />
+            </div>
+            <div class="carousel-slide">
+              <img src="images/screenshot-search-secure.png" alt="" data-slide-alt="img2Alt" width="800" height="280" />
+            </div>
+            <div class="carousel-slide">
+              <img src="images/screenshot-browser.png" alt="" data-slide-alt="img3Alt" width="1200" height="700" />
+            </div>
+          </div>
+          <div class="carousel-nav" aria-hidden="true">
+            <button type="button" id="carousel-prev" aria-label="">‹</button>
+            <button type="button" id="carousel-next" aria-label="">›</button>
+          </div>
+        </div>
+        <p class="carousel-caption" id="carousel-caption"></p>
+        <div class="carousel-dots" id="carousel-dots"></div>
       </div>
     </section>
 
-    <section aria-labelledby="download-heading">
-      <h2 id="download-heading">Загрузки</h2>
+    <section class="reveal" aria-labelledby="download-heading" data-reveal>
+      <h2 id="download-heading" data-i18n="downloadSectionHeading"></h2>
       <div class="card">
         <ul>
-          <li>
-            <a href="https://github.com/ilinei52/njitSnip-releases/releases/latest">Последний релиз</a>
-            — установщики и архивы под вашу платформу
-          </li>
-          <li>
-            <a href="https://github.com/ilinei52/njitSnip-releases/releases">Все релизы</a>
-            — история версий
-          </li>
-          <li>
-            <a href="https://github.com/ilinei52/njitSnip-releases">Репозиторий на GitHub</a>
-          </li>
+          <li><a href="https://github.com/ilinei52/njitSnip-releases/releases/latest" data-i18n="dlLatest"></a> — <span data-i18n="dlLatestSub"></span></li>
+          <li><a href="https://github.com/ilinei52/njitSnip-releases/releases" data-i18n="dlAll"></a> — <span data-i18n="dlAllSub"></span></li>
+          <li><a href="https://github.com/ilinei52/njitSnip-releases" data-i18n="dlRepo"></a></li>
         </ul>
       </div>
     </section>
 
-    <p class="hint">
-      Эта страница — публичная витрина сборок. Исходный код приложения распространяется отдельно;
-      здесь только готовые бинарники для установки.
-    </p>
+    <p class="hint reveal" data-reveal data-i18n="hint"></p>
   </div>
+
+  <script>
+(function () {
+  const STR = {
+    en: {
+      docTitle: "nJitSnip — fast snippet search for desktop",
+      metaDesc: "nJitSnip: desktop app to store and paste text snippets. Search, tags, browser, hotkeys. Windows, Linux, macOS.",
+      logoAlt: "nJitSnip logo",
+      downloadCta: "Download latest",
+      downloadLoading: "Loading…",
+      lead: "A desktop app for text snippets — code, SQL, email templates, and notes. Open the search window with a global hotkey, find what you need, and paste it anywhere.",
+      purposeHeading: "Purpose",
+      purposeP1: "<strong>nJitSnip</strong> stops the copy-paste chaos from notes, IDEs, and chats: all snippets live in one place, with tags and descriptions, ready in a couple of keystrokes.",
+      purposeP2: "Built for developers, technical writers, and anyone who pastes the same text often. Runs in the background from the system tray on <strong>Windows</strong>, <strong>Linux</strong>, and <strong>macOS</strong>.",
+      featuresHeading: "Features",
+      f1: "Compact search with filtering by title, description, and tags",
+      f2: "Global hotkeys: show window, new snippet, snippet browser",
+      f3: "Tags and descriptions; syntax highlighting (plain, JS, C++, Bash, Markdown, …)",
+      f4: "Snippet browser: list, search, and edit in one window",
+      f5: "Secure snippets stored with the OS keychain / credential manager",
+      f6: "Voice input in the search field (where the OS supports it)",
+      f7: "Localized UI, dark theme, customizable accent color",
+      shotsHeading: "Screenshots",
+      img1Alt: "Search window: PostgreSQL snippets with tags",
+      cap1: "Search: results with description and tags (#postgres, …)",
+      img2Alt: "Search: secure snippet with lock icon",
+      cap2: "Search: secure snippet (lock icon, masked content)",
+      img3Alt: "Snippet browser: list on the left, editor on the right",
+      cap3: "Snippet browser: list and filter on the left, editor on the right",
+      downloadSectionHeading: "Downloads",
+      dlLatest: "Latest release",
+      dlLatestSub: "installers and archives for your platform",
+      dlAll: "All releases",
+      dlAllSub: "version history",
+      dlRepo: "GitHub repository",
+      hint: "This page is a public build showcase. Application source is distributed separately; only binaries are hosted here.",
+      carouselPrev: "Previous screenshot",
+      carouselNext: "Next screenshot",
+    },
+    zh: {
+      docTitle: "nJitSnip — 桌面端快速文本片段工具",
+      metaDesc: "nJitSnip：在桌面保存并粘贴文本片段。搜索、标签、浏览器、快捷键。支持 Windows、Linux、macOS。",
+      logoAlt: "nJitSnip 标志",
+      downloadCta: "下载最新版",
+      downloadLoading: "加载中…",
+      lead: "用于保存文本片段的桌面应用——代码、SQL、邮件模板与笔记。通过全局快捷键打开搜索窗口，找到内容并粘贴到任意程序。",
+      purposeHeading: "用途",
+      purposeP1: "<strong>nJitSnip</strong> 让你告别在笔记、IDE 和聊天里来回复制：所有片段集中管理，带标签与描述，几次按键即可使用。",
+      purposeP2: "适合开发者、技术写作者以及经常粘贴重复文本的用户。在 <strong>Windows</strong>、<strong>Linux</strong> 与 <strong>macOS</strong> 上从系统托盘后台运行。",
+      featuresHeading: "功能",
+      f1: "紧凑搜索，可按标题、描述与标签筛选",
+      f2: "全局快捷键：显示窗口、新建片段、片段浏览器",
+      f3: "标签与描述；正文语法高亮（纯文本、JS、C++、Bash、Markdown 等）",
+      f4: "片段浏览器：列表、搜索与编辑同一窗口完成",
+      f5: "安全片段，使用系统钥匙串/凭据管理器存储",
+      f6: "搜索框语音输入（取决于系统支持）",
+      f7: "界面本地化、深色主题、可自定义强调色",
+      shotsHeading: "截图",
+      img1Alt: "搜索窗口：带标签的 PostgreSQL 片段列表",
+      cap1: "搜索：带描述与标签的结果（#postgres 等）",
+      img2Alt: "搜索：带锁图标的受保护片段",
+      cap2: "搜索：受保护片段（锁图标，内容已遮罩）",
+      img3Alt: "片段浏览器：左侧列表，右侧编辑器",
+      cap3: "片段浏览器：左侧列表与筛选，右侧编辑",
+      downloadSectionHeading: "下载",
+      dlLatest: "最新版本",
+      dlLatestSub: "适合您平台的安装包与压缩包",
+      dlAll: "所有版本",
+      dlAllSub: "历史记录",
+      dlRepo: "GitHub 仓库",
+      hint: "本页面为公开发布展示页。应用源代码另行分发；此处仅提供可安装的二进制文件。",
+      carouselPrev: "上一张截图",
+      carouselNext: "下一张截图",
+    },
+    es: {
+      docTitle: "nJitSnip — búsqueda rápida de snippets en el escritorio",
+      metaDesc: "nJitSnip: aplicación de escritorio para guardar y pegar fragmentos de texto. Búsqueda, etiquetas, navegador, atajos. Windows, Linux, macOS.",
+      logoAlt: "Logotipo de nJitSnip",
+      downloadCta: "Descargar última versión",
+      downloadLoading: "Cargando…",
+      lead: "Aplicación de escritorio para fragmentos de texto: código, SQL, plantillas de correo y notas. Abre la búsqueda con un atajo global, encuentra lo que necesitas y pégalo en cualquier programa.",
+      purposeHeading: "Propósito",
+      purposeP1: "<strong>nJitSnip</strong> evita el caos de copiar y pegar entre notas, IDEs y chats: todos los snippets en un solo lugar, con etiquetas y descripciones, listos en unos segundos.",
+      purposeP2: "Pensada para desarrolladores, redactores técnicos y quienes pegan textos repetidos. Funciona en segundo plano desde la bandeja del sistema en <strong>Windows</strong>, <strong>Linux</strong> y <strong>macOS</strong>.",
+      featuresHeading: "Funciones",
+      f1: "Búsqueda compacta por título, descripción y etiquetas",
+      f2: "Atajos globales: ventana, snippet nuevo, navegador de snippets",
+      f3: "Etiquetas y descripciones; resaltado de sintaxis (texto, JS, C++, Bash, Markdown…)",
+      f4: "Navegador de snippets: lista, búsqueda y edición en una ventana",
+      f5: "Snippets seguros con almacenamiento del sistema (llavero / credenciales)",
+      f6: "Entrada por voz en el campo de búsqueda (si el SO lo permite)",
+      f7: "Interfaz localizada, tema oscuro, color de acento configurable",
+      shotsHeading: "Capturas",
+      img1Alt: "Ventana de búsqueda: snippets PostgreSQL con etiquetas",
+      cap1: "Búsqueda: resultados con descripción y etiquetas (#postgres, …)",
+      img2Alt: "Búsqueda: snippet protegido con candado",
+      cap2: "Búsqueda: snippet protegido (candado, contenido oculto)",
+      img3Alt: "Navegador: lista a la izquierda, editor a la derecha",
+      cap3: "Navegador: lista y filtro a la izquierda, edición a la derecha",
+      downloadSectionHeading: "Descargas",
+      dlLatest: "Última versión",
+      dlLatestSub: "instaladores y archivos para tu plataforma",
+      dlAll: "Todas las versiones",
+      dlAllSub: "historial",
+      dlRepo: "Repositorio en GitHub",
+      hint: "Esta página muestra solo las compilaciones públicas. El código fuente se distribuye aparte; aquí hay binarios listos para instalar.",
+      carouselPrev: "Captura anterior",
+      carouselNext: "Captura siguiente",
+    },
+    fr: {
+      docTitle: "nJitSnip — recherche rapide de snippets sur le bureau",
+      metaDesc: "nJitSnip : application bureau pour stocker et coller des extraits de texte. Recherche, tags, navigateur, raccourcis. Windows, Linux, macOS.",
+      logoAlt: "Logo nJitSnip",
+      downloadCta: "Télécharger la dernière version",
+      downloadLoading: "Chargement…",
+      lead: "Application bureau pour vos extraits de texte — code, SQL, modèles d’e-mails et notes. Ouvrez la recherche avec un raccourci global, trouvez le bon fragment et collez-le partout.",
+      purposeHeading: "À propos",
+      purposeP1: "<strong>nJitSnip</strong> met fin au copier-coller entre notes, IDE et chats : tous les snippets au même endroit, avec tags et descriptions, accessibles en quelques frappes.",
+      purposeP2: "Pour les développeurs, rédacteurs techniques et tous ceux qui collent souvent le même texte. Fonctionne en arrière-plan depuis la barre des tâches sous <strong>Windows</strong>, <strong>Linux</strong> et <strong>macOS</strong>.",
+      featuresHeading: "Fonctionnalités",
+      f1: "Recherche compacte par titre, description et tags",
+      f2: "Raccourcis globaux : fenêtre, nouveau snippet, navigateur",
+      f3: "Tags et descriptions ; coloration syntaxique (texte, JS, C++, Bash, Markdown…)",
+      f4: "Navigateur de snippets : liste, recherche et édition dans une fenêtre",
+      f5: "Snippets protégés via le trousseau / gestionnaire d’identifiants du système",
+      f6: "Saisie vocale dans le champ de recherche (si l’OS le permet)",
+      f7: "Interface localisée, thème sombre, couleur d’accent réglable",
+      shotsHeading: "Captures d’écran",
+      img1Alt: "Recherche : snippets PostgreSQL avec tags",
+      cap1: "Recherche : résultats avec description et tags (#postgres, …)",
+      img2Alt: "Recherche : snippet sécurisé avec cadenas",
+      cap2: "Recherche : snippet sécurisé (cadenas, contenu masqué)",
+      img3Alt: "Navigateur : liste à gauche, éditeur à droite",
+      cap3: "Navigateur : liste et filtre à gauche, édition à droite",
+      downloadSectionHeading: "Téléchargements",
+      dlLatest: "Dernière version",
+      dlLatestSub: "installateurs et archives pour votre plateforme",
+      dlAll: "Toutes les versions",
+      dlAllSub: "historique des versions",
+      dlRepo: "Dépôt GitHub",
+      hint: "Cette page présente uniquement les builds publics. Le code source est distribué séparément ; seuls les binaires sont hébergés ici.",
+      carouselPrev: "Capture précédente",
+      carouselNext: "Capture suivante",
+    },
+    ru: {
+      docTitle: "nJitSnip — быстрый доступ к текстовым сниппетам",
+      metaDesc: "nJitSnip: десктопное приложение для хранения и вставки сниппетов. Поиск, теги, браузер, горячие клавиши. Windows, Linux, macOS.",
+      logoAlt: "Логотип nJitSnip",
+      downloadCta: "Скачать последнюю версию",
+      downloadLoading: "Загрузка…",
+      lead: "Десктопное приложение для хранения текстовых сниппетов — кода, SQL, шаблонов писем и заметок. Вызовите окно поиска глобальным сочетанием клавиш, найдите фрагмент и вставьте его в любую программу.",
+      purposeHeading: "Назначение",
+      purposeP1: "<strong>nJitSnip</strong> снимает рутину копирования из заметок, IDE и мессенджеров: все сниппеты в одном месте, с тегами и описаниями, доступны за пару нажатий клавиш.",
+      purposeP2: "Подходит разработчикам, техписателям и всем, кто часто вставляет повторяющиеся тексты. Работает в фоне из системного трея на <strong>Windows</strong>, <strong>Linux</strong> и <strong>macOS</strong>.",
+      featuresHeading: "Возможности",
+      f1: "Компактное окно поиска с фильтрацией по названию, описанию и тегам",
+      f2: "Глобальные горячие клавиши: окно, новый сниппет, браузер",
+      f3: "Теги и описания; подсветка синтаксиса (plain, JS, C++, Bash, Markdown и др.)",
+      f4: "Браузер сниппетов: список, поиск и редактирование в одном окне",
+      f5: "Защищённые сниппеты в системном хранилище (keychain / credential manager)",
+      f6: "Голосовой ввод в поле поиска (где поддерживается ОС)",
+      f7: "Локализация интерфейса, тёмная тема, настраиваемый акцентный цвет",
+      shotsHeading: "Скриншоты",
+      img1Alt: "Окно поиска: список сниппетов PostgreSQL с тегами",
+      cap1: "Поиск: результаты с описанием и тегами (#postgres и др.)",
+      img2Alt: "Окно поиска: защищённый сниппет с замком",
+      cap2: "Поиск: защищённый сниппет (замок, маскированное содержимое)",
+      img3Alt: "Браузер сниппетов: список слева, редактор справа",
+      cap3: "Браузер: список и фильтр слева, редактирование справа",
+      downloadSectionHeading: "Загрузки",
+      dlLatest: "Последний релиз",
+      dlLatestSub: "установщики и архивы под вашу платформу",
+      dlAll: "Все релизы",
+      dlAllSub: "история версий",
+      dlRepo: "Репозиторий на GitHub",
+      hint: "Эта страница — публичная витрина сборок. Исходный код приложения распространяется отдельно; здесь только готовые бинарники.",
+      carouselPrev: "Предыдущий скриншот",
+      carouselNext: "Следующий скриншот",
+    },
+  };
+
+  const LANG_KEY = "njitsnip-landing-lang";
+  const captions = ["cap1", "cap2", "cap3"];
+  const slideAltKeys = ["img1Alt", "img2Alt", "img3Alt"];
+
+  function detectLang() {
+    const saved = localStorage.getItem(LANG_KEY);
+    if (saved && STR[saved]) return saved;
+    const nav = (navigator.language || "en").toLowerCase();
+    if (nav.startsWith("zh")) return "zh";
+    if (nav.startsWith("es")) return "es";
+    if (nav.startsWith("fr")) return "fr";
+    if (nav.startsWith("ru")) return "ru";
+    if (nav.startsWith("en")) return "en";
+    return "en";
+  }
+
+  let currentLang = detectLang();
+
+  function t(key) {
+    return STR[currentLang][key] || STR.en[key] || key;
+  }
+
+  function applyTranslations() {
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute("content", t("metaDesc"));
+    document.title = t("docTitle");
+    document.documentElement.lang =
+      currentLang === "zh" ? "zh-CN" : currentLang === "es" ? "es" : currentLang === "fr" ? "fr" : currentLang === "ru" ? "ru" : "en";
+
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+      const key = el.getAttribute("data-i18n");
+      if (!key) return;
+      if (key === "docTitle") return;
+      const val = t(key);
+      if (el.hasAttribute("data-i18n-html")) {
+        el.innerHTML = val;
+      } else {
+        el.textContent = val;
+      }
+    });
+    document.querySelectorAll("[data-i18n-alt]").forEach(function (el) {
+      el.setAttribute("alt", t(el.getAttribute("data-i18n-alt")));
+    });
+    document.querySelectorAll("[data-slide-alt]").forEach(function (el) {
+      const k = el.getAttribute("data-slide-alt");
+      el.setAttribute("alt", t(k));
+    });
+
+    document.getElementById("carousel-prev").setAttribute("aria-label", t("carouselPrev"));
+    document.getElementById("carousel-next").setAttribute("aria-label", t("carouselNext"));
+
+    document.querySelectorAll(".lang-switch button").forEach(function (btn) {
+      btn.classList.toggle("active", btn.getAttribute("data-lang") === currentLang);
+    });
+
+    updateCarouselCaption(carouselIndex);
+  }
+
+  /* Carousel */
+  const track = document.getElementById("carousel-track");
+  const dotsEl = document.getElementById("carousel-dots");
+  const capEl = document.getElementById("carousel-caption");
+  const total = 3;
+  let carouselIndex = 0;
+  let autoTimer;
+
+  for (let i = 0; i < total; i++) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.addEventListener("click", function () { goTo(i); });
+    dotsEl.appendChild(b);
+  }
+
+  function updateDots() {
+    dotsEl.querySelectorAll("button").forEach(function (b, i) {
+      b.classList.toggle("active", i === carouselIndex);
+    });
+  }
+
+  function updateCarouselCaption(i) {
+    capEl.textContent = t(captions[i]);
+  }
+
+  function goTo(i) {
+    carouselIndex = (i + total) % total;
+    track.style.transform = "translateX(-" + carouselIndex * 100 + "%)";
+    updateDots();
+    updateCarouselCaption(carouselIndex);
+    resetAuto();
+  }
+
+  function next() { goTo(carouselIndex + 1); }
+  function prev() { goTo(carouselIndex - 1); }
+
+  function resetAuto() {
+    clearInterval(autoTimer);
+    autoTimer = setInterval(next, 6000);
+  }
+
+  document.getElementById("carousel-prev").addEventListener("click", function () { prev(); });
+  document.getElementById("carousel-next").addEventListener("click", function () { next(); });
+
+  const carouselEl = document.getElementById("carousel");
+  carouselEl.addEventListener("mouseenter", function () { clearInterval(autoTimer); });
+  carouselEl.addEventListener("mouseleave", resetAuto);
+
+  carouselEl.setAttribute("tabindex", "0");
+  carouselEl.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      prev();
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      next();
+    }
+  });
+
+  /* Scroll reveal */
+  document.querySelectorAll("[data-reveal]").forEach(function (el) {
+    el.style.opacity = "0";
+    el.style.transform = "translateY(16px)";
+    el.style.transition = "opacity 0.55s ease, transform 0.55s ease";
+  });
+  const io = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          entry.target.style.opacity = "1";
+          entry.target.style.transform = "translateY(0)";
+        }
+      });
+    },
+    { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
+  );
+  document.querySelectorAll("[data-reveal]").forEach(function (el) { io.observe(el); });
+
+  /* Language buttons */
+  document.querySelectorAll(".lang-switch button").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      const lang = btn.getAttribute("data-lang");
+      if (!STR[lang]) return;
+      currentLang = lang;
+      localStorage.setItem(LANG_KEY, currentLang);
+      applyTranslations();
+    });
+  });
+
+  /* Download: GitHub API + platform guess */
+  const API = "https://api.github.com/repos/ilinei52/njitSnip-releases/releases/latest";
+  const btnDownload = document.getElementById("btn-download");
+  const versionBadge = document.getElementById("version-badge");
+
+  function pickAsset(assets) {
+    const ua = navigator.userAgent || "";
+    const isWin = /Windows|Win64|WOW64/i.test(ua);
+    const isMac = /Mac|iPhone|iPad|Darwin/i.test(ua) && !/iPhone|iPad/i.test(ua);
+    const isLinux = /Linux/i.test(ua) && !/Android/i.test(ua);
+    function find(re) {
+      return assets.find(function (a) { return re.test(a.name); });
+    }
+    if (isWin) return find(/\.exe$/i) || find(/\.msi$/i) || find(/msix$/i);
+    if (isMac) return find(/\.dmg$/i) || find(/macos.*\.zip$/i);
+    if (isLinux) return find(/\.deb$/i) || find(/linux.*\.zip$/i);
+    return assets[0];
+  }
+
+  let releaseUrl = "https://github.com/ilinei52/njitSnip-releases/releases/latest";
+
+  btnDownload.addEventListener("click", function () {
+    if (btnDownload.dataset.href) {
+      window.open(btnDownload.dataset.href, "_blank", "noopener,noreferrer");
+      return;
+    }
+    window.open(releaseUrl, "_blank", "noopener,noreferrer");
+  });
+
+  fetch(API)
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      const assets = data.assets || [];
+      const tag = (data.tag_name || "").replace(/^v/, "");
+      if (tag) {
+        versionBadge.textContent = "v" + tag;
+        versionBadge.hidden = false;
+      }
+      const htmlUrl = data.html_url || releaseUrl;
+      releaseUrl = htmlUrl;
+      const asset = pickAsset(assets);
+      if (asset && asset.browser_download_url) {
+        btnDownload.dataset.href = asset.browser_download_url;
+      }
+    })
+    .catch(function () {});
+
+  applyTranslations();
+  updateDots();
+  updateCarouselCaption(0);
+  resetAuto();
+})();
+  </script>
 </body>
 </html>
