@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>nJitSnip — загрузки</title>
+  <meta name="description" content="Скачать nJitSnip — менеджер текстовых сниппетов для рабочего стола." />
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --text: #e7ecf3;
+      --muted: #8b9cb3;
+      --accent: #5b9fd4;
+      --accent-hover: #7eb3e0;
+      --border: #2a3544;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .wrap {
+      max-width: 40rem;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+    }
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.5rem;
+    }
+    .lead {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin: 0 0 2rem;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+    }
+    .card h2 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin: 0 0 1rem;
+      font-weight: 600;
+    }
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    li + li {
+      margin-top: 0.75rem;
+    }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+    .hint {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .hint a {
+      font-weight: 400;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>nJitSnip</h1>
+    <p class="lead">Сниппеты под рукой: поиск, горячие клавиши, буфер обмена. Здесь публикуются сборки для Windows, Linux и macOS.</p>
+
+    <div class="card">
+      <h2>Загрузки</h2>
+      <ul>
+        <li>
+          <a href="https://github.com/ilinei52/njitSnip-releases/releases/latest">Последний релиз</a>
+          — установщики и архивы для вашей платформы
+        </li>
+        <li>
+          <a href="https://github.com/ilinei52/njitSnip-releases/releases">Все релизы</a>
+          — история версий
+        </li>
+        <li>
+          <a href="https://github.com/ilinei52/njitSnip-releases">Репозиторий на GitHub</a>
+        </li>
+      </ul>
+    </div>
+
+    <p class="hint">
+      Исходный код приложения в отдельном репозитории; здесь только публичные сборки.
+    </p>
+  </div>
+</body>
+</html>
