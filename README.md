@@ -1,8 +1,9 @@
 # njitSnip-releases
 
-Публичная витрина сборок **nJitSnip** (Windows, Linux, macOS).
+Публичная витрина **[nJitSnip](https://ilinei52.github.io/njitSnip-releases/)** — сборки для Windows, Linux и macOS.
 
+- [Сайт с описанием и скриншотами](https://ilinei52.github.io/njitSnip-releases/)
 - [Последний релиз](https://github.com/ilinei52/njitSnip-releases/releases/latest)
 - [Все релизы](https://github.com/ilinei52/njitSnip-releases/releases)
 
-Статический лендинг: при включённом GitHub Pages для этого репозитория откройте сайт из настроек **Pages** (обычно `https://ilinei52.github.io/njitSnip-releases/`).
+Статические файлы лендинга лежат в репозитории **nJitSnip** в каталоге `deploy/njitSnip-releases/` и синхронизируются CI в этот репозиторий.

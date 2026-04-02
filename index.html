@@ -3,66 +3,151 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>nJitSnip — загрузки</title>
-  <meta name="description" content="Скачать nJitSnip — менеджер текстовых сниппетов для рабочего стола." />
+  <title>nJitSnip — быстрый доступ к текстовым сниппетам</title>
+  <meta name="description" content="nJitSnip: десктопное приложение для хранения и вставки сниппетов кода и текста. Поиск, теги, браузер, горячие клавиши. Windows, Linux, macOS." />
   <style>
     :root {
-      --bg: #0f1419;
-      --surface: #1a2332;
-      --text: #e7ecf3;
-      --muted: #8b9cb3;
-      --accent: #5b9fd4;
-      --accent-hover: #7eb3e0;
-      --border: #2a3544;
+      --bg: #0c0e12;
+      --surface: #151a22;
+      --text: #e8edf4;
+      --muted: #8b98ab;
+      --accent: #6ab0e8;
+      --accent-dim: #4a8ec4;
+      --border: #2a3340;
+      --card: #1a222d;
     }
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       min-height: 100vh;
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
-      background: var(--bg);
+      background: radial-gradient(ellipse 120% 80% at 50% -20%, #1a2435 0%, var(--bg) 45%);
       color: var(--text);
-      line-height: 1.6;
+      line-height: 1.65;
     }
     .wrap {
-      max-width: 40rem;
+      max-width: 52rem;
       margin: 0 auto;
-      padding: 3rem 1.5rem 4rem;
+      padding: 2.5rem 1.25rem 4rem;
     }
-    h1 {
-      font-size: 1.75rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      margin: 0 0 0.5rem;
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1.25rem 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .hero img.logo {
+      height: 88px;
+      width: auto;
+      display: block;
+      filter: drop-shadow(0 4px 24px rgba(106, 176, 232, 0.15));
+    }
+    .hero-text h1 {
+      font-size: clamp(1.6rem, 4vw, 2rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin: 0 0 0.35rem;
     }
     .lead {
       color: var(--muted);
       font-size: 1.05rem;
-      margin: 0 0 2rem;
+      margin: 0;
+      max-width: 36rem;
     }
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.25rem 1.5rem;
-    }
-    .card h2 {
-      font-size: 0.75rem;
+    h2 {
+      font-size: 0.8rem;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.08em;
       color: var(--muted);
       margin: 0 0 1rem;
       font-weight: 600;
     }
-    ul {
+    section {
+      margin-bottom: 2.25rem;
+    }
+    .purpose {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.35rem 1.5rem;
+    }
+    .purpose p {
+      margin: 0;
+      color: var(--text);
+      font-size: 1rem;
+    }
+    .purpose p + p {
+      margin-top: 0.75rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .features {
+      display: grid;
+      gap: 0.65rem 1.5rem;
+    }
+    @media (min-width: 560px) {
+      .features {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .features li {
+      list-style: none;
+      position: relative;
+      padding-left: 1.35rem;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+    .features li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.85;
+    }
+    .shots {
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+    figure {
+      margin: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    }
+    figure img {
+      width: 100%;
+      height: auto;
+      vertical-align: middle;
+      display: block;
+    }
+    figcaption {
+      padding: 0.65rem 1rem 0.85rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.2);
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.35rem 1.5rem;
+    }
+    .card ul {
       list-style: none;
       margin: 0;
       padding: 0;
     }
-    li + li {
-      margin-top: 0.75rem;
+    .card li + li {
+      margin-top: 0.65rem;
     }
     a {
       color: var(--accent);
@@ -70,43 +155,97 @@
       font-weight: 500;
     }
     a:hover {
-      color: var(--accent-hover);
+      color: #9ec9f0;
       text-decoration: underline;
     }
     .hint {
       margin-top: 2rem;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--muted);
-    }
-    .hint a {
-      font-weight: 400;
+      line-height: 1.5;
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>nJitSnip</h1>
-    <p class="lead">Сниппеты под рукой: поиск, горячие клавиши, буфер обмена. Здесь публикуются сборки для Windows, Linux и macOS.</p>
+    <header class="hero">
+      <img class="logo" src="images/app_logo.png" width="120" height="120" alt="Логотип nJitSnip" />
+      <div class="hero-text">
+        <h1>nJitSnip</h1>
+        <p class="lead">
+          Десктопное приложение для хранения текстовых сниппетов — кода, SQL, шаблонов писем и заметок.
+          Вызовите окно поиска глобальным сочетанием клавиш, найдите нужный фрагмент и вставьте его в любую программу.
+        </p>
+      </div>
+    </header>
 
-    <div class="card">
-      <h2>Загрузки</h2>
-      <ul>
-        <li>
-          <a href="https://github.com/ilinei52/njitSnip-releases/releases/latest">Последний релиз</a>
-          — установщики и архивы для вашей платформы
-        </li>
-        <li>
-          <a href="https://github.com/ilinei52/njitSnip-releases/releases">Все релизы</a>
-          — история версий
-        </li>
-        <li>
-          <a href="https://github.com/ilinei52/njitSnip-releases">Репозиторий на GitHub</a>
-        </li>
+    <section aria-labelledby="purpose-heading">
+      <h2 id="purpose-heading">Назначение</h2>
+      <div class="purpose">
+        <p>
+          <strong>nJitSnip</strong> снимает рутину копирования из заметок, IDE и мессенджеров: все сниппеты лежат в одном месте,
+          структурированы тегами и описаниями, доступны за пару нажатий клавиш.
+        </p>
+        <p>
+          Подходит разработчикам, техписателям и всем, кто часто вставляет повторяющиеся тексты.
+          Работает в фоне из системного трея на <strong>Windows</strong>, <strong>Linux</strong> и <strong>macOS</strong>.
+        </p>
+      </div>
+    </section>
+
+    <section aria-labelledby="features-heading">
+      <h2 id="features-heading">Возможности</h2>
+      <ul class="features">
+        <li>Компактное окно поиска с фильтрацией по названию, описанию и тегам</li>
+        <li>Глобальные горячие клавиши: показать окно, новый сниппет, браузер</li>
+        <li>Теги и описания; подсветка синтаксиса в теле сниппета (plain, JS, C++, Bash, Markdown и др.)</li>
+        <li>Браузер сниппетов: список, поиск и редактирование в одном окне</li>
+        <li>Защищённые сниппеты с хранением в системном хранилище (keychain / credential manager)</li>
+        <li>Голосовой ввод текста в поле поиска (где поддерживается ОС)</li>
+        <li>Локализация интерфейса, тёмная тема, настраиваемый акцентный цвет</li>
       </ul>
-    </div>
+    </section>
+
+    <section aria-labelledby="shots-heading">
+      <h2 id="shots-heading">Скриншоты</h2>
+      <div class="shots">
+        <figure>
+          <img src="images/screenshot-search-postgres.png" alt="Окно поиска: список сниппетов PostgreSQL с тегами" width="800" height="450" loading="lazy" />
+          <figcaption>Окно поиска: результаты с описанием и тегами (#postgres и др.)</figcaption>
+        </figure>
+        <figure>
+          <img src="images/screenshot-search-secure.png" alt="Окно поиска: защищённый сниппет с замком" width="800" height="280" loading="lazy" />
+          <figcaption>Поиск: защищённый сниппет (иконка замка, маскированное содержимое)</figcaption>
+        </figure>
+        <figure>
+          <img src="images/screenshot-browser.png" alt="Браузер сниппетов: список слева, редактор справа" width="1200" height="700" loading="lazy" />
+          <figcaption>Браузер сниппетов: список и фильтр слева, редактирование справа</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section aria-labelledby="download-heading">
+      <h2 id="download-heading">Загрузки</h2>
+      <div class="card">
+        <ul>
+          <li>
+            <a href="https://github.com/ilinei52/njitSnip-releases/releases/latest">Последний релиз</a>
+            — установщики и архивы под вашу платформу
+          </li>
+          <li>
+            <a href="https://github.com/ilinei52/njitSnip-releases/releases">Все релизы</a>
+            — история версий
+          </li>
+          <li>
+            <a href="https://github.com/ilinei52/njitSnip-releases">Репозиторий на GitHub</a>
+          </li>
+        </ul>
+      </div>
+    </section>
 
     <p class="hint">
-      Исходный код приложения в отдельном репозитории; здесь только публичные сборки.
+      Эта страница — публичная витрина сборок. Исходный код приложения распространяется отдельно;
+      здесь только готовые бинарники для установки.
     </p>
   </div>
 </body>
