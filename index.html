@@ -5,17 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title data-i18n="docTitle">nJitSnip</title>
   <meta name="description" content="" data-i18n-content="metaDesc" />
+  <meta property="og:title" content="nJitSnip" />
+  <meta property="og:description" content="" data-i18n-content="metaDesc" />
+  <meta property="og:image" content="images/app_logo.png" />
+  <meta property="og:type" content="website" />
   <style>
     :root {
-      --bg: #0c0e12;
-      --surface: #151a22;
-      --text: #e8edf4;
-      --muted: #8b98ab;
-      --accent: #6ab0e8;
-      --accent-glow: rgba(106, 176, 232, 0.35);
-      --border: #2a3340;
-      --card: #1a222d;
-      --topbar-h: 56px;
+      --bg: #080a0f;
+      --surface: #121820;
+      --text: #eef2f8;
+      --muted: #8a96a8;
+      --accent: #5eb3f6;
+      --accent-dim: #3d8fd4;
+      --accent-glow: rgba(94, 179, 246, 0.4);
+      --border: #243040;
+      --card: #151c28;
+      --topbar-h: 60px;
+      --radius: 16px;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -23,8 +29,11 @@
       margin: 0;
       min-height: 100vh;
       padding-top: var(--topbar-h);
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, "PingFang SC", "Microsoft YaHei", sans-serif;
-      background: radial-gradient(ellipse 120% 80% at 50% -20%, #1a2435 0%, var(--bg) 45%);
+      font-family: "Segoe UI", system-ui, -apple-system, Roboto, Ubuntu, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(ellipse 90% 60% at 80% -10%, rgba(94, 179, 246, 0.12) 0%, transparent 50%),
+        radial-gradient(ellipse 70% 50% at 10% 0%, rgba(61, 143, 212, 0.08) 0%, transparent 45%),
+        var(--bg);
       color: var(--text);
       line-height: 1.65;
     }
@@ -101,29 +110,23 @@
       0%, 100% { box-shadow: 0 2px 16px var(--accent-glow); }
       50% { box-shadow: 0 2px 28px rgba(106, 176, 232, 0.5); }
     }
-    .lang-switch {
-      display: flex;
-      align-items: center;
-      gap: 0.15rem;
-      font-size: 0.7rem;
-    }
-    .lang-switch button {
-      background: transparent;
-      border: 1px solid transparent;
-      color: var(--muted);
-      cursor: pointer;
-      padding: 0.2rem 0.35rem;
-      border-radius: 4px;
-      font: inherit;
-      transition: color 0.2s, border-color 0.2s, background 0.2s;
-    }
-    .lang-switch button:hover {
+    .lang-select {
+      appearance: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
       color: var(--text);
-      background: rgba(255,255,255,0.06);
+      font: inherit;
+      font-size: 0.8rem;
+      padding: 0.35rem 1.75rem 0.35rem 0.65rem;
+      border-radius: 8px;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238a96a8'%3E%3Cpath d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.5rem center;
     }
-    .lang-switch button.active {
-      color: var(--accent);
-      border-color: rgba(106, 176, 232, 0.4);
+    .lang-select:hover, .lang-select:focus {
+      border-color: var(--accent);
+      outline: none;
     }
 
     .wrap {
@@ -135,38 +138,119 @@
     /* Hero */
     .hero {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       align-items: center;
-      gap: 1.25rem 1.5rem;
-      margin-bottom: 2.5rem;
+      text-align: center;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+      padding: 2rem 0 1rem;
       animation: fadeInUp 0.7s ease-out 0.15s both;
     }
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .hero img.logo {
-      height: 88px;
-      width: auto;
-      display: block;
-      filter: drop-shadow(0 4px 24px rgba(106, 176, 232, 0.15));
+    .logo-frame {
+      width: 128px;
+      height: 128px;
+      border-radius: 28px;
+      background: linear-gradient(145deg, #1e2a3c 0%, #0f141c 100%);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(94, 179, 246, 0.08);
       animation: logoFloat 5s ease-in-out infinite;
+    }
+    .hero img.logo {
+      width: 96px;
+      height: 96px;
+      display: block;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 20px var(--accent-glow));
     }
     @keyframes logoFloat {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-4px); }
     }
+    .hero-text { max-width: 40rem; }
     .hero-text h1 {
-      font-size: clamp(1.6rem, 4vw, 2rem);
+      font-size: clamp(1.85rem, 5vw, 2.35rem);
       font-weight: 700;
-      letter-spacing: -0.03em;
-      margin: 0 0 0.35rem;
+      letter-spacing: -0.04em;
+      margin: 0 0 0.5rem;
+      line-height: 1.15;
     }
     .lead {
       color: var(--muted);
-      font-size: 1.05rem;
+      font-size: 1.08rem;
+      margin: 0 auto;
+      max-width: 34rem;
+    }
+    .hero-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-top: 1.25rem;
+      justify-content: center;
+    }
+    .btn-secondary {
+      appearance: none;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 600;
+      font-size: 0.875rem;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--text);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      background: rgba(106, 176, 232, 0.08);
+    }
+    .benefits-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 560px) {
+      .benefits-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .benefit-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem 1.35rem;
+      transition: transform 0.25s ease, border-color 0.25s, box-shadow 0.25s;
+    }
+    .benefit-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(106, 176, 232, 0.35);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+    }
+    .benefit-card h3 {
+      margin: 0 0 0.4rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .benefit-card p {
       margin: 0;
-      max-width: 36rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.5;
     }
 
     h2 {
@@ -361,6 +445,17 @@
       margin-left: 0.35rem;
       font-weight: 500;
     }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
   </style>
 </head>
 <body>
@@ -372,25 +467,55 @@
           Download latest
         </button>
         <span class="version-badge" id="version-badge" hidden></span>
-        <div class="lang-switch" role="group" aria-label="Language">
-          <button type="button" data-lang="en" class="active">EN</button>
-          <button type="button" data-lang="zh">中文</button>
-          <button type="button" data-lang="es">ES</button>
-          <button type="button" data-lang="fr">FR</button>
-          <button type="button" data-lang="ru">RU</button>
-        </div>
+        <label class="sr-only" for="lang-select" id="lang-select-label">Language</label>
+        <select id="lang-select" class="lang-select" aria-labelledby="lang-select-label">
+          <option value="en">English</option>
+          <option value="zh">中文</option>
+          <option value="es">Español</option>
+          <option value="fr">Français</option>
+          <option value="ru">Русский</option>
+        </select>
       </div>
     </div>
   </nav>
 
   <div class="wrap">
     <header class="hero">
-      <img class="logo" src="images/app_logo.png" width="120" height="120" alt="" data-i18n-alt="logoAlt" />
+      <div class="logo-frame">
+        <img class="logo" src="images/app_logo.png" width="96" height="96" alt="" data-i18n-alt="logoAlt" />
+      </div>
       <div class="hero-text">
+        <span class="hero-badge" data-i18n="heroBadge"></span>
         <h1>nJitSnip</h1>
         <p class="lead" data-i18n="lead"></p>
+        <div class="hero-cta">
+          <button type="button" class="btn-download" id="btn-download-hero" data-i18n="downloadCta">Download</button>
+          <a class="btn-secondary" href="https://github.com/ilinei52/njitSnip-releases" data-i18n="heroGithub">View on GitHub</a>
+        </div>
       </div>
     </header>
+
+    <section class="reveal" aria-labelledby="benefits-heading" data-reveal>
+      <h2 id="benefits-heading" data-i18n="benefitsHeading"></h2>
+      <div class="benefits-grid">
+        <article class="benefit-card">
+          <h3 data-i18n="benefit1Title"></h3>
+          <p data-i18n="benefit1Text"></p>
+        </article>
+        <article class="benefit-card">
+          <h3 data-i18n="benefit2Title"></h3>
+          <p data-i18n="benefit2Text"></p>
+        </article>
+        <article class="benefit-card">
+          <h3 data-i18n="benefit3Title"></h3>
+          <p data-i18n="benefit3Text"></p>
+        </article>
+        <article class="benefit-card">
+          <h3 data-i18n="benefit4Title"></h3>
+          <p data-i18n="benefit4Text"></p>
+        </article>
+      </div>
+    </section>
 
     <section class="reveal" aria-labelledby="purpose-heading" data-reveal>
       <h2 id="purpose-heading" data-i18n="purposeHeading"></h2>
@@ -410,6 +535,7 @@
         <li data-i18n="f5"></li>
         <li data-i18n="f6"></li>
         <li data-i18n="f7"></li>
+        <li data-i18n="f8"></li>
       </ul>
     </section>
 
@@ -461,7 +587,18 @@
       logoAlt: "nJitSnip logo",
       downloadCta: "Download latest",
       downloadLoading: "Loading…",
-      lead: "A desktop app for text snippets — code, SQL, email templates, and notes. Open the search window with a global hotkey, find what you need, and paste it anywhere.",
+      heroBadge: "Desktop · Free · No account",
+      heroGithub: "View on GitHub",
+      benefitsHeading: "Why nJitSnip",
+      benefit1Title: "Instant paste",
+      benefit1Text: "Global hotkey, fuzzy search, one Enter — your snippet is in the clipboard and ready to paste.",
+      benefit2Title: "Built for power users",
+      benefit2Text: "Tags, syntax highlighting, secure storage in the OS keychain, and a full snippet browser.",
+      benefit3Title: "Private by design",
+      benefit3Text: "Snippets stay on your machine. Secure entries use the system credential store, not plain files.",
+      benefit4Title: "Every desktop",
+      benefit4Text: "Native builds for Windows, Linux, and macOS — lightweight, tray-first, always within reach.",
+      lead: "Stop digging through old notes. nJitSnip puts every reusable text — SQL, commands, templates, passwords — one hotkey away.",
       purposeHeading: "Purpose",
       purposeP1: "<strong>nJitSnip</strong> stops the copy-paste chaos from notes, IDEs, and chats: all snippets live in one place, with tags and descriptions, ready in a couple of keystrokes.",
       purposeP2: "Built for developers, technical writers, and anyone who pastes the same text often. Runs in the background from the system tray on <strong>Windows</strong>, <strong>Linux</strong>, and <strong>macOS</strong>.",
@@ -473,6 +610,7 @@
       f5: "Secure snippets stored with the OS keychain / credential manager",
       f6: "Voice input in the search field (where the OS supports it)",
       f7: "Localized UI, dark theme, customizable accent color",
+      f8: "TOTP / 2FA codes for secure snippets (Google Authenticator, Yandex Key)",
       shotsHeading: "Screenshots",
       img1Alt: "Search window: PostgreSQL snippets with tags",
       cap1: "Search: results with description and tags (#postgres, …)",
@@ -496,7 +634,18 @@
       logoAlt: "nJitSnip 标志",
       downloadCta: "下载最新版",
       downloadLoading: "加载中…",
-      lead: "用于保存文本片段的桌面应用——代码、SQL、邮件模板与笔记。通过全局快捷键打开搜索窗口，找到内容并粘贴到任意程序。",
+      heroBadge: "桌面 · 免费",
+      heroGithub: "GitHub",
+      benefitsHeading: "为什么选择 nJitSnip",
+      benefit1Title: "即时粘贴",
+      benefit1Text: "全局快捷键、模糊搜索、回车即复制到剪贴板。",
+      benefit2Title: "为重度用户设计",
+      benefit2Text: "标签、语法高亮、系统钥匙串与片段浏览器。",
+      benefit3Title: "本地私密",
+      benefit3Text: "片段留在本机，安全条目走系统凭据存储。",
+      benefit4Title: "全平台",
+      benefit4Text: "Windows、Linux、macOS 原生构建。",
+      lead: "别再翻旧笔记。nJitSnip 让 SQL、命令和模板一键可用。",
       purposeHeading: "用途",
       purposeP1: "<strong>nJitSnip</strong> 让你告别在笔记、IDE 和聊天里来回复制：所有片段集中管理，带标签与描述，几次按键即可使用。",
       purposeP2: "适合开发者、技术写作者以及经常粘贴重复文本的用户。在 <strong>Windows</strong>、<strong>Linux</strong> 与 <strong>macOS</strong> 上从系统托盘后台运行。",
@@ -508,6 +657,7 @@
       f5: "安全片段，使用系统钥匙串/凭据管理器存储",
       f6: "搜索框语音输入（取决于系统支持）",
       f7: "界面本地化、深色主题、可自定义强调色",
+      f8: "安全片段支持 TOTP / 2FA（Google 验证器、Yandex Key）",
       shotsHeading: "截图",
       img1Alt: "搜索窗口：带标签的 PostgreSQL 片段列表",
       cap1: "搜索：带描述与标签的结果（#postgres 等）",
@@ -531,7 +681,27 @@
       logoAlt: "Logotipo de nJitSnip",
       downloadCta: "Descargar última versión",
       downloadLoading: "Cargando…",
-      lead: "Aplicación de escritorio para fragmentos de texto: código, SQL, plantillas de correo y notas. Abre la búsqueda con un atajo global, encuentra lo que necesitas y pégalo en cualquier programa.",
+      heroBadge: "Desktop · Free",
+      heroGithub: "GitHub",
+      benefitsHeading: "Why nJitSnip",
+      benefit1Title: "Instant paste",
+      benefit1Text: "Global hotkey, search, Enter — ready to paste.",
+      benefit2Title: "Power users",
+      benefit2Text: "Tags, syntax highlight, keychain, browser.",
+      benefit3Title: "Private",
+      benefit3Text: "Data stays on your machine.",
+      benefit4Title: "Multiplataforma",
+      benefit4Text: "Windows, Linux, macOS.",
+      heroBadge: "Desktop · Gratis",
+      heroGithub: "GitHub",
+      benefitsHeading: "Por qué nJitSnip",
+      benefit1Title: "Pegado al instante",
+      benefit1Text: "Atajo global, búsqueda, Enter — listo para pegar.",
+      benefit2Title: "Usuarios avanzados",
+      benefit2Text: "Etiquetas, resaltado, llavero y navegador.",
+      benefit3Title: "Privado",
+      benefit3Text: "Tus datos en tu equipo.",
+      lead: "Deja de buscar en notas viejas. SQL, comandos y plantillas — a un atajo.",
       purposeHeading: "Propósito",
       purposeP1: "<strong>nJitSnip</strong> evita el caos de copiar y pegar entre notas, IDEs y chats: todos los snippets en un solo lugar, con etiquetas y descripciones, listos en unos segundos.",
       purposeP2: "Pensada para desarrolladores, redactores técnicos y quienes pegan textos repetidos. Funciona en segundo plano desde la bandeja del sistema en <strong>Windows</strong>, <strong>Linux</strong> y <strong>macOS</strong>.",
@@ -543,6 +713,7 @@
       f5: "Snippets seguros con almacenamiento del sistema (llavero / credenciales)",
       f6: "Entrada por voz en el campo de búsqueda (si el SO lo permite)",
       f7: "Interfaz localizada, tema oscuro, color de acento configurable",
+      f8: "Códigos TOTP / 2FA en snippets seguros",
       shotsHeading: "Capturas",
       img1Alt: "Ventana de búsqueda: snippets PostgreSQL con etiquetas",
       cap1: "Búsqueda: resultados con descripción y etiquetas (#postgres, …)",
@@ -566,7 +737,18 @@
       logoAlt: "Logo nJitSnip",
       downloadCta: "Télécharger la dernière version",
       downloadLoading: "Chargement…",
-      lead: "Application bureau pour vos extraits de texte — code, SQL, modèles d’e-mails et notes. Ouvrez la recherche avec un raccourci global, trouvez le bon fragment et collez-le partout.",
+      heroBadge: "Bureau · Gratuit",
+      heroGithub: "GitHub",
+      benefitsHeading: "Pourquoi nJitSnip",
+      benefit1Title: "Collage instantané",
+      benefit1Text: "Raccourci global, recherche, Entrée — prêt à coller.",
+      benefit2Title: "Utilisateurs exigeants",
+      benefit2Text: "Tags, coloration, trousseau, navigateur.",
+      benefit3Title: "Confidentialité",
+      benefit3Text: "Vos données restent sur la machine.",
+      benefit4Title: "Multi-plateforme",
+      benefit4Text: "Windows, Linux, macOS.",
+      lead: "Fini les notes éparpillées. SQL, commandes et modèles — en un raccourci.",
       purposeHeading: "À propos",
       purposeP1: "<strong>nJitSnip</strong> met fin au copier-coller entre notes, IDE et chats : tous les snippets au même endroit, avec tags et descriptions, accessibles en quelques frappes.",
       purposeP2: "Pour les développeurs, rédacteurs techniques et tous ceux qui collent souvent le même texte. Fonctionne en arrière-plan depuis la barre des tâches sous <strong>Windows</strong>, <strong>Linux</strong> et <strong>macOS</strong>.",
@@ -578,6 +760,7 @@
       f5: "Snippets protégés via le trousseau / gestionnaire d’identifiants du système",
       f6: "Saisie vocale dans le champ de recherche (si l’OS le permet)",
       f7: "Interface localisée, thème sombre, couleur d’accent réglable",
+      f8: "Codes TOTP / 2FA pour snippets sécurisés",
       shotsHeading: "Captures d’écran",
       img1Alt: "Recherche : snippets PostgreSQL avec tags",
       cap1: "Recherche : résultats avec description et tags (#postgres, …)",
@@ -601,7 +784,18 @@
       logoAlt: "Логотип nJitSnip",
       downloadCta: "Скачать последнюю версию",
       downloadLoading: "Загрузка…",
-      lead: "Десктопное приложение для хранения текстовых сниппетов — кода, SQL, шаблонов писем и заметок. Вызовите окно поиска глобальным сочетанием клавиш, найдите фрагмент и вставьте его в любую программу.",
+      heroBadge: "Desktop · Бесплатно",
+      heroGithub: "GitHub",
+      benefitsHeading: "Почему nJitSnip",
+      benefit1Title: "Мгновенная вставка",
+      benefit1Text: "Глобальный хоткей, поиск, Enter — сниппет уже в буфере.",
+      benefit2Title: "Для power users",
+      benefit2Text: "Теги, подсветка синтаксиса, keychain и браузер сниппетов.",
+      benefit3Title: "Приватность",
+      benefit3Text: "Данные на вашем ПК; secure — в системном хранилище.",
+      benefit4Title: "Все платформы",
+      benefit4Text: "Windows, Linux, macOS — из трея, без лишнего веса.",
+      lead: "Хватит копать старые заметки. SQL, команды и шаблоны — на одном хоткее.",
       purposeHeading: "Назначение",
       purposeP1: "<strong>nJitSnip</strong> снимает рутину копирования из заметок, IDE и мессенджеров: все сниппеты в одном месте, с тегами и описаниями, доступны за пару нажатий клавиш.",
       purposeP2: "Подходит разработчикам, техписателям и всем, кто часто вставляет повторяющиеся тексты. Работает в фоне из системного трея на <strong>Windows</strong>, <strong>Linux</strong> и <strong>macOS</strong>.",
@@ -613,6 +807,7 @@
       f5: "Защищённые сниппеты в системном хранилище (keychain / credential manager)",
       f6: "Голосовой ввод в поле поиска (где поддерживается ОС)",
       f7: "Локализация интерфейса, тёмная тема, настраиваемый акцентный цвет",
+      f8: "TOTP / 2FA в защищённых сниппетах (Google Authenticator, Яндекс Ключ)",
       shotsHeading: "Скриншоты",
       img1Alt: "Окно поиска: список сниппетов PostgreSQL с тегами",
       cap1: "Поиск: результаты с описанием и тегами (#postgres и др.)",
@@ -683,9 +878,8 @@
     document.getElementById("carousel-prev").setAttribute("aria-label", t("carouselPrev"));
     document.getElementById("carousel-next").setAttribute("aria-label", t("carouselNext"));
 
-    document.querySelectorAll(".lang-switch button").forEach(function (btn) {
-      btn.classList.toggle("active", btn.getAttribute("data-lang") === currentLang);
-    });
+    const langSelect = document.getElementById("lang-select");
+    if (langSelect) langSelect.value = currentLang;
 
     updateCarouselCaption(carouselIndex);
   }
@@ -769,15 +963,13 @@
   );
   document.querySelectorAll("[data-reveal]").forEach(function (el) { io.observe(el); });
 
-  /* Language buttons */
-  document.querySelectorAll(".lang-switch button").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      const lang = btn.getAttribute("data-lang");
-      if (!STR[lang]) return;
-      currentLang = lang;
-      localStorage.setItem(LANG_KEY, currentLang);
-      applyTranslations();
-    });
+  /* Language dropdown */
+  document.getElementById("lang-select").addEventListener("change", function (e) {
+    const lang = e.target.value;
+    if (!STR[lang]) return;
+    currentLang = lang;
+    localStorage.setItem(LANG_KEY, currentLang);
+    applyTranslations();
   });
 
   /* Download: GitHub API + platform guess */
@@ -801,13 +993,16 @@
 
   let releaseUrl = "https://github.com/ilinei52/njitSnip-releases/releases/latest";
 
-  btnDownload.addEventListener("click", function () {
+  function openDownload() {
     if (btnDownload.dataset.href) {
       window.open(btnDownload.dataset.href, "_blank", "noopener,noreferrer");
       return;
     }
     window.open(releaseUrl, "_blank", "noopener,noreferrer");
-  });
+  }
+  btnDownload.addEventListener("click", openDownload);
+  const btnHero = document.getElementById("btn-download-hero");
+  if (btnHero) btnHero.addEventListener("click", openDownload);
 
   fetch(API)
     .then(function (r) { return r.json(); })
